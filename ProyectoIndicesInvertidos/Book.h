@@ -6,33 +6,32 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <string.h>
+
 using namespace std;
 
 class book {
 public:
 	book();
 
-	bool agregar(int bookID, char* title, char* authors, int average_rating, int isbn, int isbn13, char* language_code, int num_pages, int ratings_count, int text_reviews_count, char* publication_date, char* publisher);
+	
 	bool guardar();
-	bool consultarSecuencial(int bookID);
-	bool modificar();
-	bool eliminar();
+
 
 	void print();
 
-private:
 	int bookID;
-	char* title;
-	char* authors;
-	int average_rating;
-	int isbn;
-	int isbn13;
-	char* language_code;
+	string title;
+	string authors;
+	double average_rating;
+	string isbn;
+	string isbn13;
+	string language_code;
 	int num_pages;
 	int ratings_count;
 	int text_reviews_count;
-	char* publication_date;
-	char* publisher;
+	string publication_date;
+	string publisher;
 };
 
 #endif // !BOOK_H
