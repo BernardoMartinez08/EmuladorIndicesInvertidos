@@ -1,6 +1,6 @@
 #pragma once
-#ifndef BOOKS_H
-#define BOOKS_H
+#ifndef BOOK_H
+#define BOOK_H
 
 #include <iostream>
 #include <fstream>
@@ -8,9 +8,9 @@
 #include <vector>
 using namespace std;
 
-class books {
+class book {
 public:
-	books();
+	book();
 
 	bool agregar(int bookID, char* title, char* authors, int average_rating, int isbn, int isbn13, char* language_code, int num_pages, int ratings_count, int text_reviews_count, char* publication_date, char* publisher);
 	bool guardar();
@@ -35,4 +35,4 @@ private:
 	char* publisher;
 };
 
-#endif // !BOOKS_H
+#endif // !BOOK_H

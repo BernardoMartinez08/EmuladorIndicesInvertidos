@@ -1,10 +1,10 @@
-#include "books.h"
+#include "book.h"
 
-books::books() {
+book::book() {
 
 }
 
-bool books::agregar(int _bookID, char* _title, char* _authors, int _average_rating, int _isbn, int _isbn13, char* _language_code, int _num_pages, int _ratings_count, int _text_reviews_count, char* _publication_date, char* _publisher) {
+bool book::agregar(int _bookID, char* _title, char* _authors, int _average_rating, int _isbn, int _isbn13, char* _language_code, int _num_pages, int _ratings_count, int _text_reviews_count, char* _publication_date, char* _publisher) {
     bookID = _bookID;
     average_rating = _average_rating;
     isbn = _isbn;
@@ -28,7 +28,7 @@ bool books::agregar(int _bookID, char* _title, char* _authors, int _average_rati
     return true;
 }
 
-bool books::guardar() {
+bool book::guardar() {
     ofstream file("books.csv", ios::out | ios::app);
 
     if (!file) {
@@ -39,7 +39,7 @@ bool books::guardar() {
     return file.good();
 }
 
-bool books::consultarSecuencial(int _bookID) {
+bool book::consultarSecuencial(int _bookID) {
    ifstream file("books.csv", ios::in);
 
     if (!file) {
@@ -51,10 +51,10 @@ bool books::consultarSecuencial(int _bookID) {
     return file.good();
 }
 
-bool books::modificar() {
+bool book::modificar() {
 
 }
 
-bool books::eliminar() {
+bool book::eliminar() {
 
 }
