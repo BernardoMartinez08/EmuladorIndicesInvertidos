@@ -11,12 +11,10 @@
 using namespace std;
 
 class book {
+	friend ostream& operator<<(ostream&, const book&);
+	friend istream& operator>>(istream&, book&);
 public:
 	book();
-
-	
-	bool guardar();
-
 
 	void print();
 

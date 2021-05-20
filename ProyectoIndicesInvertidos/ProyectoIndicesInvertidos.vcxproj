@@ -139,12 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="books.h" />
+    <ClInclude Include="Book.h" />
     <ClInclude Include="DelimTextBuffer.h" />
+    <ClInclude Include="Libreria.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="books.cpp" />
+    <ClCompile Include="book.cpp" />
     <ClCompile Include="DelimTextBuffer.cpp" />
+    <ClCompile Include="Libreria.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
