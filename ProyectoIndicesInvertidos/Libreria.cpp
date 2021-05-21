@@ -29,3 +29,37 @@ bool Libreria::consultarLibro(istream file, int _posicion) {
     return file.good();
 }
 
+vector<long> Libreria::buscarByTitulo(istream file, string _word) {
+    if (!file) {
+        cout << "\nSe presento un problema al intentar abrir el archivo de lista .list :(\n";
+        return;
+    }
+
+    long _first = -1;
+    vector<long> posiciones;
+
+    for (int i = 0; i < autores.size(); i++) {
+        if (autores[i].word == _word) {
+            if (autores[i].status != false) {
+                _first = autores[i].first;
+                break;
+            }
+            else {
+                cout << "NO EXISTEN LIBROS RELACIONADOS";
+                break;
+            }
+        }
+    }
+
+    long _next = 0;
+    while (_next != -1) {
+        list data;
+        file >> data;
+
+        posiciones.push_back(data.position);
+        _next = data.next;
+    }
+
+    return posiciones;
+}
+
