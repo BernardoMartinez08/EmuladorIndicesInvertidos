@@ -35,13 +35,13 @@ vector<long> Libreria::buscarByTitulo(istream file, string _word) {
         return;
     }
 
-    long _first = -1;
+    long _next = -1;
     vector<long> posiciones;
 
     for (int i = 0; i < autores.size(); i++) {
         if (autores[i].word == _word) {
             if (autores[i].status != false) {
-                _first = autores[i].first;
+                _next = autores[i].first;
                 break;
             }
             else {
@@ -51,9 +51,10 @@ vector<long> Libreria::buscarByTitulo(istream file, string _word) {
         }
     }
 
-    long _next = 0;
     while (_next != -1) {
         list data;
+        file.seekg(_next);
+
         file >> data;
 
         posiciones.push_back(data.position);
