@@ -91,21 +91,41 @@ void Libreria::cargarVectorLibros()
 
 void Libreria::cargarArchivosIndices()
 {
-    // Indice Principal
-    indicePrincipal(fileIndicePrincipal, ios::out);
-    lecturaIndicePrincipal(fileIndicePrincipal, ios::in);
+    cargarIndicePrincipal();
 
-    // Indice titulo
-    indice_titulo(fileIndice_titulo, ios::out);
-    lecturaIndice_titulo(fileIndice_titulo, ios::in);
+    cargarIndiceTitulo();
 
-    // Indice Autor
-    fileIndice_autor(fileIndice_autor, ios::out);
-    lecturaIndice_autor(fileIndice_autor, ios::in);
+    cargarIndiceAutor();
 
+    cargarIndicePublicador();
+}
+
+void Libreria::cargarIndicePublicador()
+{
     // Indice publicador
     indice_publicador(fileIndice_publicador, ios::out);
     lecturaIndice_publicador(fileIndice_publicador, ios::in);
+}
+
+void Libreria::cargarIndiceAutor()
+{
+    // Indice Autor
+    fileIndice_autor(fileIndice_autor, ios::out);
+    lecturaIndice_autor(fileIndice_autor, ios::in);
+}
+
+void Libreria::cargarIndiceTitulo()
+{
+    // Indice titulo
+    indice_titulo(fileIndice_titulo, ios::out);
+    lecturaIndice_titulo(fileIndice_titulo, ios::in);
+}
+
+void Libreria::cargarIndicePrincipal()
+{
+    // Indice Principal
+    indicePrincipal(fileIndicePrincipal, ios::out);
+    lecturaIndicePrincipal(fileIndicePrincipal, ios::in);
 }
 
 void Libreria::InitLibreria()

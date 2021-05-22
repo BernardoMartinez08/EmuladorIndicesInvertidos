@@ -53,6 +53,10 @@ public:
 private:
 	void cargarVectorLibros();
 	void cargarArchivosIndices();
+	void cargarIndicePublicador();
+	void cargarIndiceAutor();
+	void cargarIndiceTitulo();
+	void cargarIndicePrincipal();
 	void InitLibreria();
 
 	void crearIndicePrincipal();
