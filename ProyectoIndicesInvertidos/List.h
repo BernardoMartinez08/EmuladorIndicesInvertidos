@@ -13,7 +13,6 @@ public:
 	list();
 
 	long position;
-	long next;
 };
 
 #endif // !LIST_H

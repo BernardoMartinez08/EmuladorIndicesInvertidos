@@ -20,14 +20,14 @@ public:
 	vector<index> publicador;
 
 
-	bool agregar(ostream file,book& newBook);
+	bool agregar();
 
 	bool consultarSecuencial(istream file, int bookID);
 	bool consultarLibro(istream file, int posicion);
 
-	vector<long> buscarByTitulo(istream file,string);
-	vector<long> buscarByAutor(istream file,string);
-	vector<long> buscarByPublicador(istream file,string);
+	vector<long> buscarByTitulo(string);
+	vector<long> buscarByAutor(string);
+	vector<long> buscarByPublicador(string);
 
 	bool modificar(int bookID);
 	bool eliminarLibro(ostream file, int bookID);

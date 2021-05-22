@@ -15,7 +15,6 @@ public:
 	index();
 
 	string word;
-	long first;
-	bool status;
+	long posicion;
 };
 #endif // !INDEX_H

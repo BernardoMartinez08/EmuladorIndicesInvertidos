@@ -1,8 +1,7 @@
 #include "Index.h"
 index::index() {
 	word;
-	first = 0;
-	status = 0;
+	posicion = 0;
 }
 
 ostream& operator<<(ostream& stream, const index& data) {
@@ -13,8 +12,7 @@ ostream& operator<<(ostream& stream, const index& data) {
 
 	stream
 		<< data.word << ","
-		<< data.first
-		<< data.status
+		<< data.posicion
 		<< flush;
 
 	return stream;
@@ -36,12 +34,7 @@ istream& operator>>(istream& stream, index& data) {
 	//first
 	char _first[8];
 	stream.getline(_first, 8);
-	data.first = int(_first);
-
-	//status
-	char _status[1];
-	stream.getline(_status, 1);
-	data.status = bool(_status);
+	data.posicion = int(_first);
 
 	//stream.ignore(1);
 

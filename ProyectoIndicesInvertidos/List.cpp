@@ -2,7 +2,6 @@
 
 list::list() {
 	position = 0;
-	next = 0;
 }
 
 ostream& operator<<(ostream& stream, const list& data) {
@@ -13,7 +12,6 @@ ostream& operator<<(ostream& stream, const list& data) {
 
 	stream
 		<< data.position 
-		<< data.next
 		<< flush;
 
 	return stream;
@@ -27,15 +25,10 @@ istream& operator>>(istream& stream, list& data) {
 
 	// leer datos del stream
 
-	//first
+	//Posicion
 	char _position[8];
 	stream.getline(_position, 8);
 	data.position = long(_position);
-
-	//status
-	char _next[8];
-	stream.getline(_next, 8);
-	data.next = long(_next);
 
 	//stream.ignore(1);
 

@@ -4,8 +4,58 @@ Libreria::Libreria() {
     InitLibreria();
 }
 
-bool Libreria::agregar(ostream file, book& newBook) {
-    file << newBook;
+bool Libreria::agregar() {
+    ofstream file(fileArchivoPrincipal, ios::out | ios::binary);
+
+    if (!archivoPrincipal) {
+        cout << "Error al intentar abrir el archivo .bin de libros\n\n";
+        return;
+    }
+
+    cout << " ***** I N G R E S O  D E  L I B R O S ***** \n\n";
+
+    book nuevo;
+    cout << "INGRESE LOS DATOS PARA EL LIBRO:\nIndique el id: ";
+    cin >> nuevo.bookID;
+
+    cout << "Indique el titulo: ";
+    cin >> nuevo.title;
+
+    cout << "Indique el autor: ";
+    cin >> nuevo.authors;
+
+    cout << "Indique la puntuacion media: ";
+    cin >> nuevo.average_rating;
+
+    cout << "Indique el isbn: ";
+    cin >> nuevo.isbn;
+
+    cout << "Indique el isbn13: ";
+    cin >> nuevo.isbn13;
+
+    cout << "Indique el codigo de idioma: ";
+    cin >> nuevo.language_code;
+
+    cout << "Indique el numero de paginas: ";
+    cin >> nuevo.num_pages;
+
+    cout << "Indique el numero de puntuaciones: ";
+    cin >> nuevo.ratings_count;
+
+    cout << "Indique el numero de reviews: ";
+    cin >> nuevo.text_reviews_count;
+
+    cout << "Indique el numero de paginas: ";
+    cin >> nuevo.num_pages;
+
+    cout << "Indique el fecha de publicacion: ";
+    cin >> nuevo.publication_date;
+
+    cout << "Indique el publicador: ";
+    cin >> nuevo.publisher;
+
+    file << nuevo;
+    file.close();
 }
 
 bool Libreria::consultarSecuencial(istream file,int _bookID) {
@@ -29,36 +79,109 @@ bool Libreria::consultarLibro(istream file, int _posicion) {
     return file.good();
 }
 
-vector<long> Libreria::buscarByTitulo(istream file, string _word) {
-    if (!file) {
-        cout << "\nSe presento un problema al intentar abrir el archivo de lista .list :(\n";
-        return;
-    }
+vector<long> Libreria::buscarByTitulo(string _word) {
+    cargarIndiceTitulo();
+    cargarIndicePrincipal();
 
-    long _next = -1;
+    long _posicion = -1;
+
+    while (!lecturaIndice_titulo.eof()) {
+        index aux;
+        lecturaIndice_titulo >> aux;
+        
+        if (aux.word == _word) {
+            _posicion = aux.posicion;
+            break;
+        }
+    }
+    
     vector<long> posiciones;
 
-    for (int i = 0; i < autores.size(); i++) {
-        if (autores[i].word == _word) {
-            if (autores[i].status != false) {
-                _next = autores[i].first;
+    if (_posicion != -1) {
+        lecturaIndicePrincipal.seekg(ios::beg, _posicion);
+        while (!lecturaIndicePrincipal.eof()) {
+            list aux;
+            lecturaIndicePrincipal >> aux;
+            if (aux.position != -1)
+                posiciones.push_back(aux.position);
+            else
                 break;
-            }
-            else {
-                cout << "NO EXISTEN LIBROS RELACIONADOS";
-                break;
-            }
+        }
+    }
+    else {
+        cout << "\nNO HAY LIBROS RELACIONADOS.";
+    }
+
+    return posiciones;
+}
+
+vector<long> Libreria::buscarByAutor(string _word) {
+    cargarIndiceAutor();
+    cargarIndicePrincipal();
+
+    long _posicion = -1;
+
+    while (!lecturaIndice_autor.eof()) {
+        index aux;
+        lecturaIndice_autor >> aux;
+
+        if (aux.word == _word) {
+            _posicion = aux.posicion;
+            break;
         }
     }
 
-    while (_next != -1) {
-        list data;
-        file.seekg(_next);
+    vector<long> posiciones;
 
-        file >> data;
+    if (_posicion != -1) {
+        lecturaIndicePrincipal.seekg(ios::beg, _posicion);
+        while (!lecturaIndicePrincipal.eof()) {
+            list aux;
+            lecturaIndicePrincipal >> aux;
+            if (aux.position != -1)
+                posiciones.push_back(aux.position);
+            else
+                break;
+        }
+    }
+    else {
+        cout << "\nNO HAY LIBROS RELACIONADOS.";
+    }
 
-        posiciones.push_back(data.position);
-        _next = data.next;
+    return posiciones;
+}
+
+vector<long> Libreria::buscarByPublicador(string _word) {
+    cargarIndicePublicador();
+    cargarIndicePrincipal();
+
+    long _posicion = -1;
+
+    while (!lecturaIndice_publicador.eof()) {
+        index aux;
+        lecturaIndice_titulo >> aux;
+
+        if (aux.word == _word) {
+            _posicion = aux.posicion;
+            break;
+        }
+    }
+
+    vector<long> posiciones;
+
+    if (_posicion != -1) {
+        lecturaIndicePrincipal.seekg(ios::beg, _posicion);
+        while (!lecturaIndicePrincipal.eof()) {
+            list aux;
+            lecturaIndicePrincipal >> aux;
+            if (aux.position != -1)
+                posiciones.push_back(aux.position);
+            else
+                break;
+        }
+    }
+    else {
+        cout << "\nNO HAY LIBROS RELACIONADOS.";
     }
 
     return posiciones;
@@ -66,10 +189,10 @@ vector<long> Libreria::buscarByTitulo(istream file, string _word) {
 
 void Libreria::cargarVectorLibros()
 {
-    //TODO que imprima texto para pedir el nombre del libro
-    cin >> fileArchivoPrincipal << flush;
+    cout << "Para cargar los datos:\nIndique la ubicacion del archivo .csv: ";
+    cin >> fileArchivoPrincipal;
 
-    archivoPrincipal(fileArchivoPrincipal, ios::in);
+    archivoPrincipal.open(fileArchivoPrincipal, ios::in);
 
     if (archivoPrincipal.fail()) {
         cout << "No se pudo abrir el archivo Principal" << endl;
@@ -103,29 +226,29 @@ void Libreria::cargarArchivosIndices()
 void Libreria::cargarIndicePublicador()
 {
     // Indice publicador
-    indice_publicador(fileIndice_publicador, ios::out);
-    lecturaIndice_publicador(fileIndice_publicador, ios::in);
+    indice_publicador.open(fileIndice_publicador, ios::out);
+    lecturaIndice_publicador.open(fileIndice_publicador, ios::in);
 }
 
 void Libreria::cargarIndiceAutor()
 {
     // Indice Autor
-    fileIndice_autor(fileIndice_autor, ios::out);
-    lecturaIndice_autor(fileIndice_autor, ios::in);
+    indice_publicador.open(fileIndice_publicador, ios::out);
+    lecturaIndice_autor.open(fileIndice_autor, ios::in);
 }
 
 void Libreria::cargarIndiceTitulo()
 {
     // Indice titulo
-    indice_titulo(fileIndice_titulo, ios::out);
-    lecturaIndice_titulo(fileIndice_titulo, ios::in);
+    indice_titulo.open(fileIndice_titulo, ios::out);
+    lecturaIndice_titulo.open(fileIndice_titulo, ios::in);
 }
 
 void Libreria::cargarIndicePrincipal()
 {
     // Indice Principal
-    indicePrincipal(fileIndicePrincipal, ios::out);
-    lecturaIndicePrincipal(fileIndicePrincipal, ios::in);
+    indicePrincipal.open(fileIndicePrincipal, ios::out);
+    lecturaIndicePrincipal.open(fileIndicePrincipal, ios::in);
 }
 
 void Libreria::InitLibreria()
@@ -136,13 +259,17 @@ void Libreria::InitLibreria()
 
 void Libreria::crearIndicePrincipal()
 {
-    //TODO crear el indice principal
-    
+    //TODO crear el indice principal    
 }
 
 void Libreria::crearIndiceSec_Titulo()
 {
     //TODO crear el indice de titulos
+    cargarIndiceTitulo();
+    
+    for (int i = 0; i < titulos.size(); i++) {
+        indice_titulo << titulos[i];
+    }
 }
 
 void Libreria::crearIndiceSec_Autor()
