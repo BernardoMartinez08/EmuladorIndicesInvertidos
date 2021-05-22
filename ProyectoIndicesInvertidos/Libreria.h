@@ -32,6 +32,32 @@ public:
 	bool modificar(int bookID);
 	bool eliminarLibro(ostream file, int bookID);
 
+	string fileIndicePrincipal{ "mainIndex.txt" };
+	string fileIndice_titulo{ "titleIndex.txt" };
+	string fileIndice_autor{ "authorIndex.txt" };
+	string fileIndice_publicador{ "publisherIndex.txt" };
+	string fileArchivoPrincipal{};
 
+	ifstream archivoPrincipal;
+
+	ifstream lecturaIndicePrincipal;
+	ifstream lecturaIndice_titulo;
+	ifstream lecturaIndice_autor;
+	ifstream lecturaIndice_publicador;
+
+	ofstream indicePrincipal;
+	ofstream indice_titulo;
+	ofstream indice_autor;
+	ofstream indice_publicador;
+
+private:
+	void cargarVectorLibros();
+	void cargarArchivosIndices();
+	void InitLibreria();
+
+	void crearIndicePrincipal();
+	void crearIndiceSec_Titulo();
+	void crearIndiceSec_Autor();
+	void crearIndiceSec_Publicador();
 };
 
