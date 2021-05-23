@@ -270,6 +270,7 @@ void Libreria::crearIndiceSec_Titulo()
     
     for (int i = 0; i < titulos.size(); i++) {
         //Escribe la palabra en el indice de titulos.
+        //Saca la posicion actual donde se va a guardar la lista en e archivo principal.
         long _posicion = indicePrincipal.tellp();
         titulos[i].posicion = _posicion;
         indice_titulo << titulos[i];
@@ -292,6 +293,7 @@ void Libreria::crearIndiceSec_Autor()
 
     for (int i = 0; i < autores.size(); i++) {
         //Escribe la palabra en el indice de titulos.
+        //Saca la posicion actual donde se va a guardar la lista en e archivo principal.
         long _posicion = indicePrincipal.tellp();
         autores[i].posicion = _posicion;
         indice_autor << autores[i];
@@ -314,6 +316,7 @@ void Libreria::crearIndiceSec_Publicador()
 
     for (int i = 0; i < publicador.size(); i++) {
         //Escribe la palabra en el indice de titulos.
+        //Saca la posicion actual donde se va a guardar la lista en e archivo principal.
         long _posicion = indicePrincipal.tellp();
         publicador[i].posicion = _posicion;
         indice_publicador << publicador[i];
