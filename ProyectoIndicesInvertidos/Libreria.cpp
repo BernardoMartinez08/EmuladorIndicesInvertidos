@@ -270,6 +270,8 @@ void Libreria::crearIndiceSec_Titulo()
     
     for (int i = 0; i < titulos.size(); i++) {
         //Escribe la palabra en el indice de titulos.
+        long _posicion = indicePrincipal.tellp();
+        titulos[i].posicion = _posicion;
         indice_titulo << titulos[i];
 
         //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
@@ -290,6 +292,8 @@ void Libreria::crearIndiceSec_Autor()
 
     for (int i = 0; i < autores.size(); i++) {
         //Escribe la palabra en el indice de titulos.
+        long _posicion = indicePrincipal.tellp();
+        autores[i].posicion = _posicion;
         indice_autor << autores[i];
 
         //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
@@ -310,6 +314,8 @@ void Libreria::crearIndiceSec_Publicador()
 
     for (int i = 0; i < publicador.size(); i++) {
         //Escribe la palabra en el indice de titulos.
+        long _posicion = indicePrincipal.tellp();
+        publicador[i].posicion = _posicion;
         indice_publicador << publicador[i];
 
         //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
