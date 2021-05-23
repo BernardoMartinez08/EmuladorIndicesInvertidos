@@ -25,9 +25,17 @@ public:
 	bool consultarSecuencial(istream file, int bookID);
 	bool consultarLibro(istream file, int posicion);
 
+	//Busqueda a traves del indice
 	vector<long> buscarByTitulo(string);
 	vector<long> buscarByAutor(string);
 	vector<long> buscarByPublicador(string);
+
+	//Busqueda secuencial
+	vector<long> buscarByTituloSec(string);
+	vector<long> buscarByAutorSec(string);
+	vector<long> buscarByPublicadorSec(string);
+
+	vector<long> matchLibros(vector<long>&, vector<long>&);
 
 	bool modificar(int bookID);
 	bool eliminarLibro(ostream file, int bookID);

@@ -1,5 +1,8 @@
 #include "Libreria.h"
 
+//TODO Funcion para importar los libros desde el csv.
+//TODO Funcion que el leer los libros del archivo original agregue palabras a los vectores y sus posiciones.
+
 Libreria::Libreria() {
     InitLibreria();
 }
@@ -329,4 +332,68 @@ void Libreria::crearIndiceSec_Publicador()
     }
     indice_publicador.close();
     indicePrincipal.close();
+}
+
+//TODO Se puede hacer estas tres funciones en una sola?
+//Recordar que se debe hacer un match entre palabras de diferentes campos entonces creo
+//que es mejor tenerlas separadas.
+
+//TODO Hacer una funcion quer reciba 2 vectores<long> y devuelva un vector del mismo tipo con la intersepcion de los dos recibidos.
+//Esta bien??
+vector<long> Libreria::matchLibros(vector<long>& a, vector<long>& b) {
+    vector<long> resultado;
+
+    for (int i = 0; i < a.size(); i++) {
+        for (int j = 0; j < b.size(); j++) {
+            if (a[i] == b[j])
+                resultado.push_back(a[i]);
+        }
+    }
+
+    return resultado;
+}
+
+vector<long> Libreria::buscarByTituloSec(string _titulo) {
+    vector<long> posiciones;
+    while (!archivoPrincipal.eof()) {
+        book book;
+        long _posicion = archivoPrincipal.tellg();
+        archivoPrincipal >> book;
+
+        if (book.title.find(_titulo) != string::npos) {
+            posiciones.push_back(_posicion);
+        }
+    }
+    archivoPrincipal.close();
+    return posiciones;
+}
+
+vector<long> Libreria::buscarByAutorSec(string _autor) {
+    vector<long> posiciones;
+    while (!archivoPrincipal.eof()) {
+        book book;
+        long _posicion = archivoPrincipal.tellg();
+        archivoPrincipal >> book;
+
+        if (book.title.find(_autor) != string::npos) {
+            posiciones.push_back(_posicion);
+        }
+    }
+    archivoPrincipal.close();
+    return posiciones;
+}
+
+vector<long> Libreria::buscarByPublicadorSec(string _publicador) {
+    vector<long> posiciones;
+    while (!archivoPrincipal.eof()) {
+        book book;
+        long _posicion = archivoPrincipal.tellg();
+        archivoPrincipal >> book;
+
+        if (book.title.find(_publicador) != string::npos) {
+            posiciones.push_back(_posicion);
+        }
+    }
+    archivoPrincipal.close();
+    return posiciones;
 }
