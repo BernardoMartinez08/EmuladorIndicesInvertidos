@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "List.h"
+#include <vector>
 
 using namespace std;
 
@@ -16,5 +18,6 @@ public:
 
 	string word;
 	long posicion;
+	vector<list> lista;
 };
 #endif // !INDEX_H

@@ -264,20 +264,60 @@ void Libreria::crearIndicePrincipal()
 
 void Libreria::crearIndiceSec_Titulo()
 {
-    //TODO crear el indice de titulos
+    //TODO Verificar si esto es funcional.
     cargarIndiceTitulo();
+    cargarIndicePrincipal();
     
     for (int i = 0; i < titulos.size(); i++) {
+        //Escribe la palabra en el indice de titulos.
         indice_titulo << titulos[i];
+
+        //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
+        for (int j = 0; j < titulos[i].lista.size(); j++) {
+            indicePrincipal << titulos[i].lista[j];
+        }
+        indicePrincipal << -1; //Al final indicar -1 de que el anterior era el ultimo libro.
     }
+    indice_titulo.close();
+    indicePrincipal.close();
 }
 
 void Libreria::crearIndiceSec_Autor()
 {
-    //TODO crear el indice de autores
+    //TODO Verificar si esto es funcional.
+    cargarIndiceAutor();
+    cargarIndicePrincipal();
+
+    for (int i = 0; i < autores.size(); i++) {
+        //Escribe la palabra en el indice de titulos.
+        indice_autor << autores[i];
+
+        //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
+        for (int j = 0; j < autores[i].lista.size(); j++) {
+            indicePrincipal << autores[i].lista[j];
+        }
+        indicePrincipal << -1; //Al final indicar -1 de que el anterior era el ultimo libro.
+    }
+    indice_autor.close();
+    indicePrincipal.close();
 }
 
 void Libreria::crearIndiceSec_Publicador()
 {
-    //TODO crear el indice de publicadores
+    //TODO Verificar si esto es funcional.
+    cargarIndicePublicador();
+    cargarIndicePrincipal();
+
+    for (int i = 0; i < publicador.size(); i++) {
+        //Escribe la palabra en el indice de titulos.
+        indice_publicador << publicador[i];
+
+        //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
+        for (int j = 0; j < autores[i].lista.size(); j++) {
+            indice_publicador << publicador[i].lista[j];
+        }
+        indicePrincipal << -1; //Al final indicar -1 de que el anterior era el ultimo libro.
+    }
+    indice_publicador.close();
+    indicePrincipal.close();
 }
