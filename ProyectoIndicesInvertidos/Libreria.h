@@ -1,5 +1,8 @@
 #pragma once
+#ifndef LIBRERIA_H
+#define LIBRERIA_H
 
+#include <iostream>
 #include "Book.h"
 #include "Index.h"
 #include "List.h"
@@ -13,6 +16,8 @@ class Libreria
 public:
 	Libreria();
 
+	bool read(istream&, book&);
+
 	vector<book> libros;
 
 	vector<index> titulos;
@@ -22,7 +27,7 @@ public:
 
 	bool agregar();
 
-	bool consultarSecuencial(istream file, int bookID);
+	bool consultarSecuencial(istream file, string bookID);
 	bool consultarLibro(istream file, int posicion);
 
 	//Busqueda a traves del indice
@@ -37,8 +42,6 @@ public:
 
 	vector<long> matchLibros(vector<long>&, vector<long>&);
 
-	bool modificar(int bookID);
-	bool eliminarLibro(ostream file, int bookID);
 
 	string fileIndicePrincipal{ "mainIndex.txt" };
 	string fileIndice_titulo{ "titleIndex.txt" };
@@ -72,4 +75,6 @@ private:
 	void crearIndiceSec_Autor();
 	void crearIndiceSec_Publicador();
 };
+
+#endif // !LIBRERIA_H
 

@@ -1,57 +1,62 @@
 #include "book.h"
 
 book::book() {
-    bookID = 0;
+	bookID;
     title;
     authors;
-    average_rating = 0;
+    average_rating;
     isbn;
     isbn13;
     language_code;
-    num_pages = 0;
-    ratings_count = 0;
-    text_reviews_count = 0;
+    num_pages;
+    ratings_count;
+    text_reviews_count;
     publication_date;
     publisher;
 }
 
 ostream& operator<<(ostream& stream, const book& book) {
-	if (!stream) {
+	/*if (!stream) {
 		cout << "\nSe presento un problema al intentar abrir el archivo de libros .csv :(\n";
 		return stream;
-	}
+	}*/
 	
-	stream
-		<< book.bookID << ","
-		<< book.title << ","
-		<< book.authors << ","
-		<< book.average_rating << ","
-		<< book.isbn << ","
-		<< book.isbn13 << ","
-		<< book.language_code << ","
-		<< book.num_pages << ","
-		<< book.ratings_count << ","
-		<< book.text_reviews_count << ","
-		<< book.publication_date << ","
-		<< book.publisher << ","
-		<< flush;
+	stream << book.bookID;
+	stream << ",";
+	stream << book.title;
+	stream << ",";
+	stream << book.authors;
+	stream << ",";
+	stream << book.average_rating;
+	stream << ",";
+	stream << book.isbn;
+	stream << ",";
+	stream << book.isbn13;
+	stream << ",";
+	stream << book.language_code;
+	stream << ",";
+	stream << book.num_pages;
+	stream << ",";
+	stream << book.ratings_count;
+	stream << ",";
+	stream << book.text_reviews_count;
+	stream << ",";
+	stream << book.publication_date;
+	stream << ",";
+	stream << book.publisher;
+	stream << "/";
 
 	return stream;
 }
 
 istream& operator>>(istream& stream, book& book) {
-	if (!stream) {
-		cout << "\nSe presento un problema al intentar abrir el archivo de libros .csv :(\n";
-		return stream;
-	}
-	
 	// leer datos del stream
 	char delim = ',';
 
 	//BookID
 	char _bookID[7];
 	stream.getline(_bookID, 7, delim);
-	book.bookID = int(_bookID);
+	book.bookID = string(_bookID);
 
 	//title
 	char _title[260];
@@ -66,7 +71,7 @@ istream& operator>>(istream& stream, book& book) {
 	//average rating
 	char averate[100];
 	stream.getline(averate, 100, delim);
-	book.average_rating = atof(averate);
+	book.average_rating = string(averate);
 
 	// isbn
 	char _isbn[20];
@@ -86,17 +91,17 @@ istream& operator>>(istream& stream, book& book) {
 	//numpages
 	char pages[20];
 	stream.getline(pages, 20, delim);
-	book.num_pages = int(pages);
+	book.num_pages = string(pages);
 
 	//ratings count
 	char ratecount[20];
 	stream.getline(ratecount, 20, delim);
-	book.ratings_count = int(ratecount);
+	book.ratings_count = string(ratecount);
 
 	//text review count
 	char txtreviews[20];
 	stream.getline(txtreviews, 20, delim);
-	book.text_reviews_count = int(txtreviews);
+	book.text_reviews_count = string(txtreviews);
 
 	// pub date
 	char pubdate[20];
@@ -105,17 +110,18 @@ istream& operator>>(istream& stream, book& book) {
 
 	//publisher
 	char pub[80];
-	stream.getline(pub, 80, delim);
+	stream.getline(pub, 80, '/');
 	book.publisher = string(pub);
 
-	stream.ignore(1);
+	//stream.ignore(1);
 
 	return stream;
 }
 
+
 void book::print() {
-	cout 
-		<< "Book ID = " << bookID << endl
+	cout
+		<< "\n\nBook ID = " << bookID << endl
 		<< "Title = " << title << endl
 		<< "Authors = " << authors << endl
 		<< "Average Rating = " << average_rating << endl
@@ -126,6 +132,5 @@ void book::print() {
 		<< "Count of Ratings = " << ratings_count << endl
 		<< "Count of Text Reviews = " << text_reviews_count << endl
 		<< "Publication Date = " << publication_date << endl
-		<< "Publisher = " << publisher << endl
-		<< endl << flush;
+		<< "Publisher = " << publisher << endl;
 }

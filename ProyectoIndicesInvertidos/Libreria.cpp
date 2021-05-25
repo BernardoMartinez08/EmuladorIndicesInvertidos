@@ -1,4 +1,5 @@
 #include "Libreria.h"
+#include <cstring>
 
 //TODO Funcion para importar los libros desde el csv.
 //TODO Funcion que el leer los libros del archivo original agregue palabras a los vectores y sus posiciones.
@@ -12,7 +13,7 @@ bool Libreria::agregar() {
 
     if (!archivoPrincipal) {
         cout << "Error al intentar abrir el archivo .bin de libros\n\n";
-        return;
+        return false;
     }
 
     cout << " ***** I N G R E S O  D E  L I B R O S ***** \n\n";
@@ -61,12 +62,12 @@ bool Libreria::agregar() {
     file.close();
 }
 
-bool Libreria::consultarSecuencial(istream file,int _bookID) {
+bool Libreria::consultarSecuencial(istream file,string _bookID) {
     while (!file.eof()) {
         book book;
         file >> book;
 
-        if (book.bookID == _bookID) {
+        if (book.bookID.compare(_bookID)) {
             book.print();
             return true;
         }
@@ -199,7 +200,7 @@ void Libreria::cargarVectorLibros()
 
     if (archivoPrincipal.fail()) {
         cout << "No se pudo abrir el archivo Principal" << endl;
-        _getch();
+       // _getch();
         return;
     }
 
@@ -396,4 +397,73 @@ vector<long> Libreria::buscarByPublicadorSec(string _publicador) {
     }
     archivoPrincipal.close();
     return posiciones;
+}
+
+bool Libreria::read(istream& stream, book& book) {
+    // leer datos del stream
+    char delim = ',';
+
+    //BookID
+    char _bookID[7];
+    stream.getline(_bookID, 7, delim);
+    book.bookID = string(_bookID);
+
+    //title
+    char _title[260];
+    stream.getline(_title, 260, delim);
+    book.title = string(_title);
+
+    //authors
+    char _authors[800];
+    stream.getline(_authors, 800, delim);
+    book.authors = string(_authors);
+
+    //average rating
+    char averate[100];
+    stream.getline(averate, 100, delim);
+    book.average_rating = string(averate);
+
+    // isbn
+    char _isbn[20];
+    stream.getline(_isbn, 20, delim);
+    book.isbn = string(_isbn);
+
+    //isbn13
+    char _isbn13[20];
+    stream.getline(_isbn13, 20, delim);
+    book.isbn13 = string(_isbn13);
+
+    //language_code
+    char _langcode[20];
+    stream.getline(_langcode, 20, delim);
+    book.language_code = string(_langcode);
+
+    //numpages
+    char pages[20];
+    stream.getline(pages, 20, delim);
+    book.num_pages = string(pages);
+
+    //ratings count
+    char ratecount[20];
+    stream.getline(ratecount, 20, delim);
+    book.ratings_count = string(ratecount);
+
+    //text review count
+    char txtreviews[20];
+    stream.getline(txtreviews, 20, delim);
+    book.text_reviews_count = string(txtreviews);
+
+    // pub date
+    char pubdate[20];
+    stream.getline(pubdate, 20, delim);
+    book.publication_date = string(pubdate);
+
+    //publisher
+    char pub[80];
+    stream.getline(pub, 80, ';');
+    book.publisher = string(pub);
+
+    //stream.ignore(1);
+
+    return stream.good();
 }

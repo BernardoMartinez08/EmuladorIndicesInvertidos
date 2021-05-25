@@ -18,16 +18,16 @@ public:
 
 	void print();
 
-	int bookID;
+	string bookID;
 	string title;
 	string authors;
-	double average_rating;
+	string average_rating;
 	string isbn;
 	string isbn13;
 	string language_code;
-	int num_pages;
-	int ratings_count;
-	int text_reviews_count;
+	string num_pages;
+	string ratings_count;
+	string text_reviews_count;
 	string publication_date;
 	string publisher;
 };
