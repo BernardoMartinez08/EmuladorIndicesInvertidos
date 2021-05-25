@@ -8,6 +8,7 @@
 #include "List.h"
 #include <vector>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -29,6 +30,7 @@ public:
 
 	bool consultarSecuencial(istream file, string bookID);
 	bool consultarLibro(istream file, int posicion);
+	bool agregarPalabras(book&, long);
 
 	//Busqueda a traves del indice
 	vector<long> buscarByTitulo(string);

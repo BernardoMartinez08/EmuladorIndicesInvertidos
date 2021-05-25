@@ -397,3 +397,81 @@ bool Libreria::read(istream& stream, book& book) {
 
     return stream.good();
 }
+
+bool Libreria::agregarPalabras(book& _book, long _posicion) {
+    //Agregar el titulo
+    istringstream isstream(_book.title);
+
+    while (!isstream.eof()) {
+        string tempStr;
+        isstream >> tempStr;
+        bool existe = false;
+        list auxList;
+        auxList.position = _posicion;
+
+        for (int i = 0; i < titulos.size(); i++) {
+            if (titulos[i].word.compare(tempStr)) {
+                titulos[i].lista->push_back(auxList);
+                existe = true;
+            }
+        }
+
+        if (!existe) {
+            index auxIndex;
+            auxIndex.word = tempStr;
+            auxIndex.lista->push_back(auxList);
+            titulos.push_back(auxIndex);
+        }
+    }
+
+    //Agregar el autores
+    istringstream isstream2(_book.authors);
+
+    while (!isstream2.eof()) {
+        string tempStr;
+        isstream2 >> tempStr;
+        bool existe = false;
+        list auxList;
+        auxList.position = _posicion;
+
+        for (int i = 0; i < titulos.size(); i++) {
+            if (autores[i].word.compare(tempStr)) {
+                autores[i].lista->push_back(auxList);
+                existe = true;
+            }
+        }
+
+        if (!existe) {
+            index auxIndex;
+            auxIndex.word = tempStr;
+            auxIndex.lista->push_back(auxList);
+            autores.push_back(auxIndex);
+        }
+    }
+
+    //Agregar el publicadores
+    istringstream isstream3(_book.publisher);
+
+    while (!isstream3.eof()) {
+        string tempStr;
+        isstream3 >> tempStr;
+        bool existe = false;
+        list auxList;
+        auxList.position = _posicion;
+
+        for (int i = 0; i < titulos.size(); i++) {
+            if (publicador[i].word.compare(tempStr)) {
+                publicador[i].lista->push_back(auxList);
+                existe = true;
+            }
+        }
+
+        if (!existe) {
+            index auxIndex;
+            auxIndex.word = tempStr;
+            auxIndex.lista->push_back(auxList);
+            publicador.push_back(auxIndex);
+        }
+    }
+
+}
