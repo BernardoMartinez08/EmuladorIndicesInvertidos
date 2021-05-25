@@ -28,7 +28,7 @@ public:
 
 	bool agregar();
 
-	bool consultarSecuencial(istream file, string bookID);
+	bool agregarDataToIndex();
 	bool consultarLibro(istream file, int posicion);
 	bool agregarPalabras(book&, long);
 

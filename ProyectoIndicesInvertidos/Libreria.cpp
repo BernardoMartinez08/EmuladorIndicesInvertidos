@@ -60,17 +60,17 @@ bool Libreria::agregar() {
     file.close();
 }
 
-bool Libreria::consultarSecuencial(istream file,string _bookID) {
-    while (!file.eof()) {
+bool Libreria::agregarDataToIndex() {
+    archivoPrincipal.open(fileArchivoPrincipal, ios::in | ios::binary);
+    while (!archivoPrincipal.eof()) {
         book book;
-        file >> book;
+        long posicion = archivoPrincipal.tellg();
+        archivoPrincipal >> book;
 
-        if (book.bookID.compare(_bookID)) {
-            book.print();
-            return true;
-        }
+        agregarPalabras(book,posicion);
     }
-    return false;
+    archivoPrincipal.close();
+    return true;
 }
 
 bool Libreria::consultarLibro(istream file, int _posicion) {
