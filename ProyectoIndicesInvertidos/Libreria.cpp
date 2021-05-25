@@ -1,11 +1,9 @@
 #include "Libreria.h"
 #include <cstring>
 
-//TODO Funcion para importar los libros desde el csv.
-//TODO Funcion que el leer los libros del archivo original agregue palabras a los vectores y sus posiciones.
 
 Libreria::Libreria() {
-    InitLibreria();
+
 }
 
 bool Libreria::agregar() {
@@ -84,111 +82,15 @@ bool Libreria::consultarLibro(istream file, int _posicion) {
 }
 
 vector<long> Libreria::buscarByTitulo(string _word) {
-    cargarIndiceTitulo();
-    cargarIndicePrincipal();
-
-    long _posicion = -1;
-
-    while (!lecturaIndice_titulo.eof()) {
-        index aux;
-        lecturaIndice_titulo >> aux;
-        
-        if (aux.word == _word) {
-            _posicion = aux.posicion;
-            break;
-        }
-    }
-    
-    vector<long> posiciones;
-
-    if (_posicion != -1) {
-        lecturaIndicePrincipal.seekg(ios::beg, _posicion);
-        while (!lecturaIndicePrincipal.eof()) {
-            list aux;
-            lecturaIndicePrincipal >> aux;
-            if (aux.position != -1)
-                posiciones.push_back(aux.position);
-            else
-                break;
-        }
-    }
-    else {
-        cout << "\nNO HAY LIBROS RELACIONADOS.";
-    }
-
-    return posiciones;
+   
 }
 
 vector<long> Libreria::buscarByAutor(string _word) {
-    cargarIndiceAutor();
-    cargarIndicePrincipal();
-
-    long _posicion = -1;
-
-    while (!lecturaIndice_autor.eof()) {
-        index aux;
-        lecturaIndice_autor >> aux;
-
-        if (aux.word == _word) {
-            _posicion = aux.posicion;
-            break;
-        }
-    }
-
-    vector<long> posiciones;
-
-    if (_posicion != -1) {
-        lecturaIndicePrincipal.seekg(ios::beg, _posicion);
-        while (!lecturaIndicePrincipal.eof()) {
-            list aux;
-            lecturaIndicePrincipal >> aux;
-            if (aux.position != -1)
-                posiciones.push_back(aux.position);
-            else
-                break;
-        }
-    }
-    else {
-        cout << "\nNO HAY LIBROS RELACIONADOS.";
-    }
-
-    return posiciones;
+    
 }
 
 vector<long> Libreria::buscarByPublicador(string _word) {
-    cargarIndicePublicador();
-    cargarIndicePrincipal();
-
-    long _posicion = -1;
-
-    while (!lecturaIndice_publicador.eof()) {
-        index aux;
-        lecturaIndice_titulo >> aux;
-
-        if (aux.word == _word) {
-            _posicion = aux.posicion;
-            break;
-        }
-    }
-
-    vector<long> posiciones;
-
-    if (_posicion != -1) {
-        lecturaIndicePrincipal.seekg(ios::beg, _posicion);
-        while (!lecturaIndicePrincipal.eof()) {
-            list aux;
-            lecturaIndicePrincipal >> aux;
-            if (aux.position != -1)
-                posiciones.push_back(aux.position);
-            else
-                break;
-        }
-    }
-    else {
-        cout << "\nNO HAY LIBROS RELACIONADOS.";
-    }
-
-    return posiciones;
+    
 }
 
 void Libreria::cargarVectorLibros()
@@ -218,48 +120,94 @@ void Libreria::cargarVectorLibros()
 
 void Libreria::cargarArchivosIndices()
 {
-    cargarIndicePrincipal();
+    //CARGAR EL INDICE DE TITULOS
+    lecturaIndice_titulo.open(fileIndice_titulo, ios::in | ios::binary);
+    lecturaIndicePrincipal.open(fileArchivoPrincipal,ios::in | ios::binary);
 
-    cargarIndiceTitulo();
+    long _posicion = -1;
 
-    cargarIndiceAutor();
+    while (!lecturaIndice_titulo.eof()) {
+        index auxIndex;
+        lecturaIndice_titulo >> auxIndex;
 
-    cargarIndicePublicador();
+        titulos.push_back(auxIndex);
+        _posicion = auxIndex.posicion;
+
+
+        if (_posicion != -1) {
+            lecturaIndicePrincipal.seekg(_posicion);
+            while (!lecturaIndicePrincipal.eof()) {
+                list auxList;
+                lecturaIndicePrincipal >> auxList;
+                if (auxList.position != -1)
+                    auxIndex.lista->push_back(auxList);
+                else
+                    break;
+            }
+        }
+    }
+    lecturaIndice_titulo.close();
+    lecturaIndicePrincipal.close();
+
+    //CARGAR EL INDICE DE AUTORES
+    lecturaIndice_autor.open(fileIndice_autor, ios::in | ios::binary);
+    lecturaIndicePrincipal.open(fileArchivoPrincipal, ios::in | ios::binary);
+
+    _posicion = -1;
+
+    while (!lecturaIndice_autor.eof()) {
+        index auxIndex;
+        lecturaIndice_autor >> auxIndex;
+
+        autores.push_back(auxIndex);
+        _posicion = auxIndex.posicion;
+
+
+        if (_posicion != -1) {
+            lecturaIndicePrincipal.seekg(_posicion);
+            while (!lecturaIndicePrincipal.eof()) {
+                list auxList;
+                lecturaIndicePrincipal >> auxList;
+                if (auxList.position != -1)
+                    auxIndex.lista->push_back(auxList);
+                else
+                    break;
+            }
+        }
+    }
+    lecturaIndice_autor.close();
+    lecturaIndicePrincipal.close();
+
+    //CARGAR EL INDICE DE PUBLICADORES
+    lecturaIndice_publicador.open(fileIndice_publicador, ios::in | ios::binary);
+    lecturaIndicePrincipal.open(fileArchivoPrincipal, ios::in | ios::binary);
+
+    _posicion = -1;
+
+    while (!lecturaIndice_publicador.eof()) {
+        index auxIndex;
+        lecturaIndice_publicador >> auxIndex;
+
+        publicador.push_back(auxIndex);
+        _posicion = auxIndex.posicion;
+
+
+        if (_posicion != -1) {
+            lecturaIndicePrincipal.seekg(_posicion);
+            while (!lecturaIndicePrincipal.eof()) {
+                list auxList;
+                lecturaIndicePrincipal >> auxList;
+                if (auxList.position != -1)
+                    auxIndex.lista->push_back(auxList);
+                else
+                    break;
+            }
+        }
+    }
+    lecturaIndice_publicador.close();
+    lecturaIndicePrincipal.close();
 }
 
-void Libreria::cargarIndicePublicador()
-{
-    // Indice publicador
-    indice_publicador.open(fileIndice_publicador, ios::out);
-    lecturaIndice_publicador.open(fileIndice_publicador, ios::in);
-}
-
-void Libreria::cargarIndiceAutor()
-{
-    // Indice Autor
-    indice_publicador.open(fileIndice_publicador, ios::out);
-    lecturaIndice_autor.open(fileIndice_autor, ios::in);
-}
-
-void Libreria::cargarIndiceTitulo()
-{
-    // Indice titulo
-    indice_titulo.open(fileIndice_titulo, ios::out);
-    lecturaIndice_titulo.open(fileIndice_titulo, ios::in);
-}
-
-void Libreria::cargarIndicePrincipal()
-{
-    // Indice Principal
-    indicePrincipal.open(fileIndicePrincipal, ios::out);
-    lecturaIndicePrincipal.open(fileIndicePrincipal, ios::in);
-}
-
-void Libreria::InitLibreria()
-{
-    cargarVectorLibros();
-    cargarArchivosIndices();
-}
 
 void Libreria::crearIndicePrincipal()
 {
@@ -268,22 +216,18 @@ void Libreria::crearIndicePrincipal()
 
 void Libreria::crearIndiceSec_Titulo()
 {
-    //TODO Verificar si esto es funcional.
-    cargarIndiceTitulo();
-    cargarIndicePrincipal();
+    indice_titulo.open(fileIndice_titulo, ios::out, ios::app | ios::binary);
+    indicePrincipal.open(fileIndicePrincipal, ios::out, ios::app | ios::binary);
     
     for (int i = 0; i < titulos.size(); i++) {
-        //Escribe la palabra en el indice de titulos.
-        //Saca la posicion actual donde se va a guardar la lista en e archivo principal.
         long _posicion = indicePrincipal.tellp();
         titulos[i].posicion = _posicion;
         indice_titulo << titulos[i];
 
-        //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
-        for (int j = 0; j < titulos[i].lista.size(); j++) {
-            indicePrincipal << titulos[i].lista[j];
+        for (int j = 0; j < titulos[i].lista->size(); j++) {
+            indicePrincipal << titulos[i].lista->at(j);
         }
-        indicePrincipal << -1; //Al final indicar -1 de que el anterior era el ultimo libro.
+        indicePrincipal << -1;
     }
     indice_titulo.close();
     indicePrincipal.close();
@@ -291,22 +235,18 @@ void Libreria::crearIndiceSec_Titulo()
 
 void Libreria::crearIndiceSec_Autor()
 {
-    //TODO Verificar si esto es funcional.
-    cargarIndiceAutor();
-    cargarIndicePrincipal();
+    indice_autor.open(fileIndice_autor, ios::out, ios::app | ios::binary);
+    indicePrincipal.open(fileIndicePrincipal, ios::out, ios::app | ios::binary);
 
     for (int i = 0; i < autores.size(); i++) {
-        //Escribe la palabra en el indice de titulos.
-        //Saca la posicion actual donde se va a guardar la lista en e archivo principal.
         long _posicion = indicePrincipal.tellp();
         autores[i].posicion = _posicion;
         indice_autor << autores[i];
 
-        //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
-        for (int j = 0; j < autores[i].lista.size(); j++) {
-            indicePrincipal << autores[i].lista[j];
+        for (int j = 0; j < autores[i].lista->size(); j++) {
+            indicePrincipal << autores[i].lista->at(j);
         }
-        indicePrincipal << -1; //Al final indicar -1 de que el anterior era el ultimo libro.
+        indicePrincipal << -1;
     }
     indice_autor.close();
     indicePrincipal.close();
@@ -314,33 +254,23 @@ void Libreria::crearIndiceSec_Autor()
 
 void Libreria::crearIndiceSec_Publicador()
 {
-    //TODO Verificar si esto es funcional.
-    cargarIndicePublicador();
-    cargarIndicePrincipal();
+    indice_publicador.open(fileIndice_publicador, ios::out, ios::app | ios::binary);
+    indicePrincipal.open(fileIndicePrincipal, ios::out, ios::app | ios::binary);
 
     for (int i = 0; i < publicador.size(); i++) {
-        //Escribe la palabra en el indice de titulos.
-        //Saca la posicion actual donde se va a guardar la lista en e archivo principal.
         long _posicion = indicePrincipal.tellp();
         publicador[i].posicion = _posicion;
         indice_publicador << publicador[i];
 
-        //Cada palabra tiene un vector con sus posiciones, escribir esas posiciones en el indice principal.
-        for (int j = 0; j < autores[i].lista.size(); j++) {
-            indice_publicador << publicador[i].lista[j];
+        for (int j = 0; j < autores[i].lista->size(); j++) {
+            indice_publicador << publicador[i].lista->at(j);
         }
-        indicePrincipal << -1; //Al final indicar -1 de que el anterior era el ultimo libro.
+        indicePrincipal << -1;
     }
     indice_publicador.close();
     indicePrincipal.close();
 }
 
-//TODO Se puede hacer estas tres funciones en una sola?
-//Recordar que se debe hacer un match entre palabras de diferentes campos entonces creo
-//que es mejor tenerlas separadas.
-
-//TODO Hacer una funcion quer reciba 2 vectores<long> y devuelva un vector del mismo tipo con la intersepcion de los dos recibidos.
-//Esta bien??
 vector<long> Libreria::matchLibros(vector<long>& a, vector<long>& b) {
     vector<long> resultado;
 

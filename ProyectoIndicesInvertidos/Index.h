@@ -18,6 +18,6 @@ public:
 
 	string word;
 	long posicion;
-	vector<list> lista;
+	vector<list>* lista;
 };
 #endif // !INDEX_H

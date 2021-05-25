@@ -21,30 +21,19 @@ ostream& operator<<(ostream& stream, const book& book) {
 		return stream;
 	}*/
 	
-	stream << book.bookID;
-	stream << ",";
-	stream << book.title;
-	stream << ",";
-	stream << book.authors;
-	stream << ",";
-	stream << book.average_rating;
-	stream << ",";
-	stream << book.isbn;
-	stream << ",";
-	stream << book.isbn13;
-	stream << ",";
-	stream << book.language_code;
-	stream << ",";
-	stream << book.num_pages;
-	stream << ",";
-	stream << book.ratings_count;
-	stream << ",";
-	stream << book.text_reviews_count;
-	stream << ",";
-	stream << book.publication_date;
-	stream << ",";
-	stream << book.publisher;
-	stream << "/";
+	stream
+		<< book.bookID << ","
+		<< book.title << ","
+		<< book.authors << ","
+		<< book.average_rating << ","
+		<< book.isbn << ","
+		<< book.isbn13 << ","
+		<< book.language_code << ","
+		<< book.num_pages << ","
+		<< book.ratings_count << ","
+		<< book.text_reviews_count << ","
+		<< book.publication_date << ","
+		<< book.publisher << "^";
 
 	return stream;
 }
@@ -110,10 +99,8 @@ istream& operator>>(istream& stream, book& book) {
 
 	//publisher
 	char pub[80];
-	stream.getline(pub, 80, '/');
+	stream.getline(pub, 80, '^');
 	book.publisher = string(pub);
-
-	//stream.ignore(1);
 
 	return stream;
 }
