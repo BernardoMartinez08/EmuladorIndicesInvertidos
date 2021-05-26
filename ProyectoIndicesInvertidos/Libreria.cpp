@@ -3,17 +3,12 @@
 
 
 Libreria::Libreria() {
-
+    titulos = new vector<index>;
+    autores = new vector<index>;
+    publicador = new vector<index>;
 }
 
-bool Libreria::agregar() {
-    ofstream file(fileArchivoPrincipal, ios::out | ios::binary);
-
-    if (!archivoPrincipal) {
-        cout << "Error al intentar abrir el archivo .bin de libros\n\n";
-        return false;
-    }
-
+bool Libreria::agregar(ostream& file) {
     cout << " ***** I N G R E S O  D E  L I B R O S ***** \n\n";
 
     book nuevo;
@@ -57,23 +52,20 @@ bool Libreria::agregar() {
     cin >> nuevo.publisher;
 
     file << nuevo;
-    file.close();
-}
-
-bool Libreria::agregarDataToIndex() {
-    archivoPrincipal.open(fileArchivoPrincipal, ios::in | ios::binary);
-    while (!archivoPrincipal.eof()) {
-        book book;
-        long posicion = archivoPrincipal.tellg();
-        archivoPrincipal >> book;
-
-        agregarPalabras(book,posicion);
-    }
-    archivoPrincipal.close();
     return true;
 }
 
-bool Libreria::consultarLibro(istream file, int _posicion) {
+bool Libreria::agregarDataToIndex(istream& file) {
+    while (!file.eof()) {
+        book book;
+        long posicion = file.tellg();
+        file >> book;
+        agregarPalabras(book,posicion);
+    }
+    return true;
+}
+
+bool Libreria::consultarLibro(istream& file, int _posicion) {
     book book;
     file.seekg(ios::beg, _posicion);
     file >> book;
@@ -82,47 +74,44 @@ bool Libreria::consultarLibro(istream file, int _posicion) {
 }
 
 vector<long> Libreria::buscarByTitulo(string _word) {
-   
+    vector<long> aux;
+    for (int i = 0; i < titulos->size(); i++) {
+        if (titulos->at(i).word == _word) {
+            for (int j = 0; j < titulos->at(i).lista->size(); j++) {
+                aux.push_back(titulos->at(i).lista->at(j).position);
+            }
+        }
+    }
+    return aux;
 }
 
 vector<long> Libreria::buscarByAutor(string _word) {
-    
+    vector<long> aux;
+    for (int i = 0; i < autores->size(); i++) {
+        if (autores->at(i).word == _word) {
+            for (int j = 0; j < autores->at(i).lista->size(); j++) {
+                aux.push_back(autores->at(i).lista->at(j).position);
+            }
+        }
+    }
+    return aux;
 }
 
 vector<long> Libreria::buscarByPublicador(string _word) {
-    
+    vector<long> aux;
+    for (int i = 0; i < publicador->size(); i++) {
+        if (publicador->at(i).word == _word) {
+            for (int j = 0; j < publicador->at(i).lista->size(); j++) {
+                aux.push_back(publicador->at(i).lista->at(j).position);
+            }
+        }
+    }
+    return aux;
 }
 
-void Libreria::cargarVectorLibros()
-{
-    cout << "Para cargar los datos:\nIndique la ubicacion del archivo .csv: ";
-    cin >> fileArchivoPrincipal;
-
-    archivoPrincipal.open(fileArchivoPrincipal, ios::in);
-
-    if (archivoPrincipal.fail()) {
-        cout << "No se pudo abrir el archivo Principal" << endl;
-       // _getch();
-        return;
-    }
-
-    book libroActual;
-    while(!archivoPrincipal.eof())
-    {
-        long pos = archivoPrincipal.tellg();
-        archivoPrincipal >> libroActual;
-        libros.push_back(libroActual);
-        // TODO usar la posicion actual del apuntador para escribir al indice principal
-    }
-
-    archivoPrincipal.close();
-}
-
-void Libreria::cargarArchivosIndices()
-{
+void Libreria::cargarArchivosIndices(istream& file){
     //CARGAR EL INDICE DE TITULOS
-    lecturaIndice_titulo.open(fileIndice_titulo, ios::in | ios::binary);
-    lecturaIndicePrincipal.open(fileArchivoPrincipal,ios::in | ios::binary);
+    ifstream lecturaIndice_titulo(fileIndice_titulo, ios::in | ios::binary);
 
     long _posicion = -1;
 
@@ -130,15 +119,15 @@ void Libreria::cargarArchivosIndices()
         index auxIndex;
         lecturaIndice_titulo >> auxIndex;
 
-        titulos.push_back(auxIndex);
+        titulos->push_back(auxIndex);
         _posicion = auxIndex.posicion;
 
 
         if (_posicion != -1) {
-            lecturaIndicePrincipal.seekg(_posicion);
-            while (!lecturaIndicePrincipal.eof()) {
+            file.seekg(_posicion);
+            while (!file.eof()) {
                 list auxList;
-                lecturaIndicePrincipal >> auxList;
+                file >> auxList;
                 if (auxList.position != -1)
                     auxIndex.lista->push_back(auxList);
                 else
@@ -147,11 +136,9 @@ void Libreria::cargarArchivosIndices()
         }
     }
     lecturaIndice_titulo.close();
-    lecturaIndicePrincipal.close();
 
     //CARGAR EL INDICE DE AUTORES
-    lecturaIndice_autor.open(fileIndice_autor, ios::in | ios::binary);
-    lecturaIndicePrincipal.open(fileArchivoPrincipal, ios::in | ios::binary);
+    ifstream lecturaIndice_autor(fileIndice_autor, ios::in | ios::binary);
 
     _posicion = -1;
 
@@ -159,15 +146,15 @@ void Libreria::cargarArchivosIndices()
         index auxIndex;
         lecturaIndice_autor >> auxIndex;
 
-        autores.push_back(auxIndex);
+        autores->push_back(auxIndex);
         _posicion = auxIndex.posicion;
 
 
         if (_posicion != -1) {
-            lecturaIndicePrincipal.seekg(_posicion);
-            while (!lecturaIndicePrincipal.eof()) {
+            file.seekg(_posicion);
+            while (!file.eof()) {
                 list auxList;
-                lecturaIndicePrincipal >> auxList;
+                file >> auxList;
                 if (auxList.position != -1)
                     auxIndex.lista->push_back(auxList);
                 else
@@ -176,11 +163,9 @@ void Libreria::cargarArchivosIndices()
         }
     }
     lecturaIndice_autor.close();
-    lecturaIndicePrincipal.close();
-
+    
     //CARGAR EL INDICE DE PUBLICADORES
-    lecturaIndice_publicador.open(fileIndice_publicador, ios::in | ios::binary);
-    lecturaIndicePrincipal.open(fileArchivoPrincipal, ios::in | ios::binary);
+    ifstream lecturaIndice_publicador(fileIndice_publicador, ios::in | ios::binary);
 
     _posicion = -1;
 
@@ -188,15 +173,15 @@ void Libreria::cargarArchivosIndices()
         index auxIndex;
         lecturaIndice_publicador >> auxIndex;
 
-        publicador.push_back(auxIndex);
+        publicador->push_back(auxIndex);
         _posicion = auxIndex.posicion;
 
 
         if (_posicion != -1) {
-            lecturaIndicePrincipal.seekg(_posicion);
-            while (!lecturaIndicePrincipal.eof()) {
+            file.seekg(_posicion);
+            while (!file.eof()) {
                 list auxList;
-                lecturaIndicePrincipal >> auxList;
+                file >> auxList;
                 if (auxList.position != -1)
                     auxIndex.lista->push_back(auxList);
                 else
@@ -205,27 +190,26 @@ void Libreria::cargarArchivosIndices()
         }
     }
     lecturaIndice_publicador.close();
-    lecturaIndicePrincipal.close();
 }
 
-
-void Libreria::crearIndicePrincipal()
-{
-    //TODO crear el indice principal    
+bool Libreria::guardarIndices(){
+    crearIndiceSec_Titulo();
+    crearIndiceSec_Autor();
+    crearIndiceSec_Publicador();
+    return true;
 }
 
-void Libreria::crearIndiceSec_Titulo()
-{
-    indice_titulo.open(fileIndice_titulo, ios::out, ios::app | ios::binary);
-    indicePrincipal.open(fileIndicePrincipal, ios::out, ios::app | ios::binary);
-    
-    for (int i = 0; i < titulos.size(); i++) {
+void Libreria::crearIndiceSec_Titulo(){
+    ofstream indice_titulo(fileIndice_titulo, ios::out | ios::app | ios::binary);
+    ofstream indicePrincipal(fileIndicePrincipal, ios::out | ios::app | ios::binary);
+
+    for (int i = 0; i < titulos->size(); i++) {
         long _posicion = indicePrincipal.tellp();
-        titulos[i].posicion = _posicion;
-        indice_titulo << titulos[i];
+        titulos->at(i).posicion = _posicion;
+        indice_titulo << titulos->at(i);
 
-        for (int j = 0; j < titulos[i].lista->size(); j++) {
-            indicePrincipal << titulos[i].lista->at(j);
+        for (int j = 0; j < titulos->at(i).lista->size(); j++) {
+            indicePrincipal << titulos->at(i).lista->at(j);
         }
         indicePrincipal << -1;
     }
@@ -233,18 +217,17 @@ void Libreria::crearIndiceSec_Titulo()
     indicePrincipal.close();
 }
 
-void Libreria::crearIndiceSec_Autor()
-{
-    indice_autor.open(fileIndice_autor, ios::out, ios::app | ios::binary);
-    indicePrincipal.open(fileIndicePrincipal, ios::out, ios::app | ios::binary);
+void Libreria::crearIndiceSec_Autor(){
+    ofstream indice_autor(fileIndice_autor, ios::out | ios::app | ios::binary);
+    ofstream indicePrincipal(fileIndicePrincipal, ios::out | ios::app | ios::binary);
 
-    for (int i = 0; i < autores.size(); i++) {
+    for (int i = 0; i < autores->size(); i++) {
         long _posicion = indicePrincipal.tellp();
-        autores[i].posicion = _posicion;
-        indice_autor << autores[i];
+        autores->at(i).posicion = _posicion;
+        indice_autor << autores->at(i);
 
-        for (int j = 0; j < autores[i].lista->size(); j++) {
-            indicePrincipal << autores[i].lista->at(j);
+        for (int j = 0; j < autores->at(i).lista->size(); j++) {
+            indicePrincipal << autores->at(i).lista->at(j);
         }
         indicePrincipal << -1;
     }
@@ -252,18 +235,17 @@ void Libreria::crearIndiceSec_Autor()
     indicePrincipal.close();
 }
 
-void Libreria::crearIndiceSec_Publicador()
-{
-    indice_publicador.open(fileIndice_publicador, ios::out, ios::app | ios::binary);
-    indicePrincipal.open(fileIndicePrincipal, ios::out, ios::app | ios::binary);
+void Libreria::crearIndiceSec_Publicador(){
+    ofstream indice_publicador(fileIndice_publicador, ios::out | ios::app |  ios::binary);
+    ofstream indicePrincipal(fileIndicePrincipal, ios::out | ios::app | ios::binary);
 
-    for (int i = 0; i < publicador.size(); i++) {
+    for (int i = 0; i < publicador->size(); i++) {
         long _posicion = indicePrincipal.tellp();
-        publicador[i].posicion = _posicion;
-        indice_publicador << publicador[i];
+        publicador->at(i).posicion = _posicion;
+        indice_publicador << publicador->at(i);
 
-        for (int j = 0; j < autores[i].lista->size(); j++) {
-            indice_publicador << publicador[i].lista->at(j);
+        for (int j = 0; j < publicador->at(i).lista->size(); j++) {
+            indicePrincipal << publicador->at(i).lista->at(j);
         }
         indicePrincipal << -1;
     }
@@ -284,48 +266,45 @@ vector<long> Libreria::matchLibros(vector<long>& a, vector<long>& b) {
     return resultado;
 }
 
-vector<long> Libreria::buscarByTituloSec(string _titulo) {
+vector<long> Libreria::buscarByTituloSec(string _titulo, istream& file) {
     vector<long> posiciones;
-    while (!archivoPrincipal.eof()) {
+    while (!file.eof()) {
         book book;
-        long _posicion = archivoPrincipal.tellg();
-        archivoPrincipal >> book;
+        long _posicion = file.tellg();
+        file >> book;
 
         if (book.title.find(_titulo) != string::npos) {
             posiciones.push_back(_posicion);
         }
     }
-    archivoPrincipal.close();
     return posiciones;
 }
 
-vector<long> Libreria::buscarByAutorSec(string _autor) {
+vector<long> Libreria::buscarByAutorSec(string _autor, istream& file) {
     vector<long> posiciones;
-    while (!archivoPrincipal.eof()) {
+    while (!file.eof()) {
         book book;
-        long _posicion = archivoPrincipal.tellg();
-        archivoPrincipal >> book;
+        long _posicion = file.tellg();
+        file >> book;
 
         if (book.title.find(_autor) != string::npos) {
             posiciones.push_back(_posicion);
         }
     }
-    archivoPrincipal.close();
     return posiciones;
 }
 
-vector<long> Libreria::buscarByPublicadorSec(string _publicador) {
+vector<long> Libreria::buscarByPublicadorSec(string _publicador, istream& file) {
     vector<long> posiciones;
-    while (!archivoPrincipal.eof()) {
+    while (!file.eof()) {
         book book;
-        long _posicion = archivoPrincipal.tellg();
-        archivoPrincipal >> book;
+        long _posicion = file.tellg();
+        file >> book;
 
         if (book.title.find(_publicador) != string::npos) {
             posiciones.push_back(_posicion);
         }
     }
-    archivoPrincipal.close();
     return posiciones;
 }
 
@@ -409,18 +388,20 @@ bool Libreria::agregarPalabras(book& _book, long _posicion) {
         list auxList;
         auxList.position = _posicion;
 
-        for (int i = 0; i < titulos.size(); i++) {
-            if (titulos[i].word.compare(tempStr)) {
-                titulos[i].lista->push_back(auxList);
+        
+        for (int i = 0; i < titulos->size(); i++) {
+            if (titulos->at(i).word == (tempStr)) {
+                titulos->at(i).lista->push_back(auxList);
                 existe = true;
             }
         }
+        
 
         if (!existe) {
             index auxIndex;
             auxIndex.word = tempStr;
             auxIndex.lista->push_back(auxList);
-            titulos.push_back(auxIndex);
+            titulos->push_back(auxIndex);
         }
     }
 
@@ -434,22 +415,24 @@ bool Libreria::agregarPalabras(book& _book, long _posicion) {
         list auxList;
         auxList.position = _posicion;
 
-        for (int i = 0; i < titulos.size(); i++) {
-            if (autores[i].word.compare(tempStr)) {
-                autores[i].lista->push_back(auxList);
+       
+        for (int i = 0; i < autores->size(); i++) {
+            if (autores->at(i).word == (tempStr)) {
+                autores->at(i).lista->push_back(auxList);
                 existe = true;
             }
         }
+        
 
         if (!existe) {
             index auxIndex;
             auxIndex.word = tempStr;
             auxIndex.lista->push_back(auxList);
-            autores.push_back(auxIndex);
+            autores->push_back(auxIndex);
         }
     }
 
-    //Agregar el publicadores
+    //Agregar en publicadores
     istringstream isstream3(_book.publisher);
 
     while (!isstream3.eof()) {
@@ -459,19 +442,21 @@ bool Libreria::agregarPalabras(book& _book, long _posicion) {
         list auxList;
         auxList.position = _posicion;
 
-        for (int i = 0; i < titulos.size(); i++) {
-            if (publicador[i].word.compare(tempStr)) {
-                publicador[i].lista->push_back(auxList);
+       
+        for (int i = 0; i < publicador->size(); i++) {
+            if (publicador->at(i).word == (tempStr)) {
+                publicador->at(i).lista->push_back(auxList);
                 existe = true;
             }
         }
+        
 
         if (!existe) {
             index auxIndex;
             auxIndex.word = tempStr;
             auxIndex.lista->push_back(auxList);
-            publicador.push_back(auxIndex);
+            publicador->push_back(auxIndex);
         }
     }
-
+    return true;
 }

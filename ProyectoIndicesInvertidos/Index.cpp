@@ -2,14 +2,11 @@
 index::index() {
 	word;
 	posicion = 0;
+	lista = new vector<list>;
 }
 
 ostream& operator<<(ostream& stream, const index& data) {
-	if (!stream) {
-		cout << "\nSe presento un problema al intentar abrir el archivo de indice .index :(\n";
-		return stream;
-	}
-
+	// escribir datos al stream
 	stream
 		<< data.word << ","
 		<< data.posicion
@@ -19,11 +16,6 @@ ostream& operator<<(ostream& stream, const index& data) {
 }
 
 istream& operator>>(istream& stream, index& data) {
-	if (!stream) {
-		cout << "\nSe presento un problema al intentar abrir el archivo de indice .index :(\n";
-		return stream;
-	}
-
 	// leer datos del stream
 
 	//palabra

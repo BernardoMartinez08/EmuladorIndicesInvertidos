@@ -5,11 +5,7 @@ list::list() {
 }
 
 ostream& operator<<(ostream& stream, const list& data) {
-	if (!stream) {
-		cout << "\nSe presento un problema al intentar abrir el archivo de lista .list :(\n";
-		return stream;
-	}
-
+	// escribir datos al stream
 	stream
 		<< data.position 
 		<< flush;
@@ -18,11 +14,6 @@ ostream& operator<<(ostream& stream, const list& data) {
 }
 
 istream& operator>>(istream& stream, list& data) {
-	if (!stream) {
-		cout << "\nSe presento un problema al intentar abrir el archivo de indice .index :(\n";
-		return stream;
-	}
-
 	// leer datos del stream
 
 	//Posicion

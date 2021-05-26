@@ -21,16 +21,18 @@ public:
 
 	vector<book> libros;
 
-	vector<index> titulos;
-	vector<index> autores;
-	vector<index> publicador;
+	vector<index>* titulos;
+	vector<index>* autores;
+	vector<index>* publicador;
 
 
-	bool agregar();
+	bool agregar(ostream&);
 
-	bool agregarDataToIndex();
-	bool consultarLibro(istream file, int posicion);
+	bool agregarDataToIndex(istream& file);
+	bool guardarIndices();
+	bool consultarLibro(istream& file, int posicion);
 	bool agregarPalabras(book&, long);
+	void cargarArchivosIndices(istream&);
 
 	//Busqueda a traves del indice
 	vector<long> buscarByTitulo(string);
@@ -38,9 +40,9 @@ public:
 	vector<long> buscarByPublicador(string);
 
 	//Busqueda secuencial
-	vector<long> buscarByTituloSec(string);
-	vector<long> buscarByAutorSec(string);
-	vector<long> buscarByPublicadorSec(string);
+	vector<long> buscarByTituloSec(string, istream&);
+	vector<long> buscarByAutorSec(string, istream&);
+	vector<long> buscarByPublicadorSec(string, istream&);
 
 	vector<long> matchLibros(vector<long>&, vector<long>&);
 
@@ -49,25 +51,8 @@ public:
 	string fileIndice_titulo{ "titleIndex.txt" };
 	string fileIndice_autor{ "authorIndex.txt" };
 	string fileIndice_publicador{ "publisherIndex.txt" };
-	string fileArchivoPrincipal{};
-
-	ifstream archivoPrincipal;
-
-	ifstream lecturaIndicePrincipal;
-	ifstream lecturaIndice_titulo;
-	ifstream lecturaIndice_autor;
-	ifstream lecturaIndice_publicador;
-
-	ofstream indicePrincipal;
-	ofstream indice_titulo;
-	ofstream indice_autor;
-	ofstream indice_publicador;
 
 private:
-	void cargarVectorLibros();
-	void cargarArchivosIndices();
-
-	void crearIndicePrincipal();
 	void crearIndiceSec_Titulo();
 	void crearIndiceSec_Autor();
 	void crearIndiceSec_Publicador();
